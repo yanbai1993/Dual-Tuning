@@ -1,0 +1,24 @@
+_BASE_: "../Base-bagtricks.yml"
+
+MODEL:
+  BACKBONE:
+    DEPTH: "18x"
+    PRETRAIN_PATH: "/home/baiyan/.cache/torch/checkpoints/resnet18-5c106cde.pth"
+    FEAT_DIM: 512
+  HEADS:
+    NUM_CLASSES: 312 
+  LOSSES:
+    NAME: ("CrossEntropyLoss",) 
+DATASETS:
+  NAMES: ("partMarket1501",)
+  TESTS: ("Market1501",)
+
+OUTPUT_DIR: "logs/market1501/bagtricks_R18-softmax-part"
+
+SOLVER:
+  IMS_PER_BATCH: 64
+  CHECKPOINT_PERIOD: 10
+  MAX_EPOCH: 120
+TEST:
+  EVAL_PERIOD: 30
+  IMS_PER_BATCH: 128

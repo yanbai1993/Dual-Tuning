@@ -1,0 +1,37 @@
+_BASE_: "../Base-bagtricks.yml"
+
+  
+OLDMODEL:
+  CONFIG: "./configs/Market1501/part-bagtricks_R18-softmax.yml"
+  WEIGHT: "logs_final/market1501/bagtricks_R18-softmax-part/model_final.pth" 
+  N2OMAP: "./datasets/N2O_label/market_n2o.npy"
+MODEL:
+  CENTERPATH: "./logs_final/market1501/bagtricks_R18-softmax-part/all-center-bn.pkl" 
+  META_ARCHITECTURE: "DualTuning"
+  BACKBONE:
+    NAME: "build_resnet_backbone"
+    DEPTH: 50x"
+    PRETRAIN_PATH: "/home/baiyan/.cache/torch/checkpoints/resnet50-19c8e357.pth"
+    # You can also use resnet50 or any other model
+    FEAT_DIM: 2048
+  LOSSES:
+    NAME: ("CrossEntropyLoss", "OldCenterLoss_bn", "loss_O2Nfc", "loss_N2Ofc",) 
+    # The loss include metric loss for target task and compatible loss. 
+    # The metric loss can be one loss or a combination of multiple losses (e.g., "CrossEntropyLoss", "TripletLoss", "CircleLoss") 
+    # The compatible loss can be one loss or a combination of multiple losses (e.g., "OldCenterLoss", "loss_O2Nfc", "loss_N2Ofc", "N2OTripletLoss", "N2OTripletLoss_bn", "loss_KL", "loss_triplet_center","L2Loss").
+    # More details see ./fastreid/modeling/meta_arch/dualtuning.py
+    N2O:
+      SCALE: 0.2
+
+DATASETS:
+  NAMES: ("Market1501",)
+  TESTS: ("Market1501",)
+  
+OUTPUT_DIR: "logs/Market1501/R50-softmax_n2048_o512_dualtuning" 
+SOLVER:
+  IMS_PER_BATCH: 64
+  CHECKPOINT_PERIOD: 40
+
+TEST:
+  EVAL_PERIOD: 10
+  IMS_PER_BATCH: 128

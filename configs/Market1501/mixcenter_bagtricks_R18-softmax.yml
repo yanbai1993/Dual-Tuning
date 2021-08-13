@@ -1,0 +1,30 @@
+_BASE_: "../Base-bagtricks.yml"
+
+OLDMODEL:
+  CONFIG: "./configs/Market1501/part-bagtricks_R18-softmax.yml"
+  WEIGHT: "logs_final/market1501/bagtricks_R18-softmax-part/model_final.pth" 
+  N2OMAP: "./datasets/N2O_label/market_n2o.npy"
+MODEL:
+  CENTERPATH: "./logs_final/market1501/bagtricks_R18-softmax-part/all-center-bn.pkl" 
+  META_ARCHITECTURE: "MixCenter"
+  BACKBONE:
+    NAME: "build_resnet_backbone"
+    DEPTH: "18x"
+    PRETRAIN_PATH: "/home/baiyan/.cache/torch/checkpoints/resnet18-5c106cde.pth" 
+    FEAT_DIM: 512  
+  LOSSES:
+    NAME: ("CrossEntropyLoss", "MixCenterLoss", "loss_O2Nfc", "loss_N2Ofc",) 
+
+DATASETS:
+  NAMES: ("Market1501",)
+  TESTS: ("Market1501",)
+
+OUTPUT_DIR: "logs/Market1501/R18-softmax_n512_o512_dualtuning_mixcenter" 
+
+SOLVER:
+  IMS_PER_BATCH: 64
+  CHECKPOINT_PERIOD: 120 
+
+TEST:
+  EVAL_PERIOD: 10
+  IMS_PER_BATCH: 128

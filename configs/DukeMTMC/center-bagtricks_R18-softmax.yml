@@ -1,0 +1,38 @@
+_BASE_: "../Base-bagtricks.yml"
+  
+OLDMODEL:
+  CONFIG: "./configs/DukeMTMC/bagtricks_R50.yml"
+  WEIGHT: "./logs/dukemtmc/bagtricks_R50_softmax/model_final.pth"
+  N2OMAP: ""
+MODEL:
+  CENTERPATH: "./logs/dukemtmc/bagtricks_R50_softmax/all-center-dukemtmc.pkl" 
+  META_ARCHITECTURE: "DualTuning"
+  BACKBONE:
+    NAME: "build_resnet_backbone"
+    DEPTH: "18x"
+    PRETRAIN_PATH: "/home/baiyan/.cache/torch/checkpoints/resnet18-5c106cde.pth"
+    FEAT_DIM: 512
+  LOSSES:
+    NAME: ("CrossEntropyLoss","OldCenterLoss_bn", ) #"loss_O2Nfc", "loss_N2Ofc",) 
+    # The loss include metric loss for target task and compatible loss. 
+    # The metric loss can be one loss or a combination of multiple losses (e.g., "CrossEntropyLoss", "TripletLoss", "CircleLoss") 
+    # The compatible loss can be one loss or a combination of multiple losses (e.g., "OldCenterLoss", "loss_O2Nfc", "loss_N2Ofc", "N2OTripletLoss", "N2OTripletLoss_bn", "loss_KL", "loss_triplet_center","L2Loss").
+    # More details see ./fastreid/modeling/meta_arch/dualtuning.py
+    N2OTRI:
+       TWOWAY: True
+    N2O:
+      SCALE: 0.2
+
+DATASETS:
+  NAMES: ("DukeMTMC",)
+  TESTS: ("DukeMTMC",)
+BCT:
+  FILTER_TEACHER: TRUE     
+OUTPUT_DIR: "logs/dukemtmc/R50-R18-softmax_n512_o2048_centerbn" 
+SOLVER:
+  IMS_PER_BATCH: 64
+  CHECKPOINT_PERIOD: 40
+
+TEST:
+  EVAL_PERIOD: 10
+  IMS_PER_BATCH: 128

@@ -1,0 +1,19 @@
+_BASE_: "../Base-bagtricks.yml"
+
+DATASETS:
+  NAMES: ("DukeMTMC",)
+  TESTS: ("DukeMTMC",)
+MODEL:
+  BACKBONE:
+    DEPTH: "18x"
+    PRETRAIN_PATH: "/home/baiyan/.cache/torch/checkpoints/resnet18-5c106cde.pth"
+    FEAT_DIM: 512
+  LOSSES:
+    NAME: ("CrossEntropyLoss",)
+SOLVER:
+  IMS_PER_BATCH: 64
+  CHECKPOINT_PERIOD: 30
+OUTPUT_DIR: "logs/dukemtmc/bagtricks_R18_softmax"
+TEST:
+  EVAL_PERIOD: 20
+  IMS_PER_BATCH: 128 

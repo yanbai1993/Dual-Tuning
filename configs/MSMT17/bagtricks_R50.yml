@@ -1,0 +1,17 @@
+_BASE_: "../Base-bagtricks.yml"
+
+DATASETS:
+  NAMES: ("MSMT17all",)
+  TESTS: ("Market1501",)
+MODEL:
+  LOSSES:
+    NAME: ("CrossEntropyLoss",)
+  HEADS:
+    NUM_CLASSES: 4101
+SOLVER:
+  IMS_PER_BATCH: 256
+  CHECKPOINT_PERIOD: 2
+OUTPUT_DIR: "logs/msmt17/bagtricks_R50_softmax_all_2"
+TEST:
+  EVAL_PERIOD: 2 
+  IMS_PER_BATCH: 512

@@ -1,0 +1,17 @@
+_BASE_: "../Base-bagtricks.yml"
+
+DATASETS:
+  NAMES: ("DukeMTMC",)
+  TESTS: ("DukeMTMC",)
+MODEL:
+  LOSSES:
+    NAME: ("CrossEntropyLoss",)
+  HEADS:
+    NUM_CLASSES: 702
+SOLVER:
+  IMS_PER_BATCH: 64
+  CHECKPOINT_PERIOD: 30
+OUTPUT_DIR: "logs/dukemtmc/bagtricks_R50_softmax"
+TEST:
+  EVAL_PERIOD: 20
+  IMS_PER_BATCH: 128 
